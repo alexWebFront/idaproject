@@ -10,18 +10,28 @@
         <div class="card__price">10 000 руб.</div>
       </div>
     </div>
+    <div class="card__remove" @click="cardRemove">
+      <img src="../assets/icons/delete-card.svg" alt="">
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "product-card",
+  methods: {
+    cardRemove() {
+      console.log("Удалено!")
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .card {
   max-width: 332px;
+  position: relative;
+  cursor: pointer;
 
   &__container {
     background: #FFFEFB;
@@ -31,13 +41,12 @@ export default {
 
   &__content {
     padding: 16px 16px 24px 16px;
-  }
+   }
 
   &__image {
     object-fit: cover;
     width: 100%;
     height: 100%;
-    cursor: pointer;
   }
 
   &__title {
@@ -62,5 +71,23 @@ export default {
     line-height: 30px;
     color: #3F3F3F;
   }
+
+  &__remove {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    display: none;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.card:hover .card__remove {
+  display: block;
 }
 </style>

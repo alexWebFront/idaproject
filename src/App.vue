@@ -35,16 +35,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "./assets/variables";
 
 .app {
-  padding: 32px 0 0 0;
-  background: rgba(255, 254, 251, 0.8);
+  background-color: $background-color;
 
   &__container {
     width: 100%;
     max-width: 1440px;
     margin: 0 auto;
-    padding: 0 32px;
+    padding: 32px 32px 0 32px;
+    background: rgba(255, 254, 251, 0.8);
   }
 
   &__header {
