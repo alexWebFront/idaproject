@@ -8,7 +8,7 @@
         <div class="card__title">{{ productCard.title }}</div>
         <div class="card__description">{{ productCard.description }}
         </div>
-        <div class="card__price">{{ productCard.price }} руб.</div>
+        <div class="card__price">{{ formatedPrice }} руб.</div>
       </div>
     </div>
     <div class="card__remove" @click="$emit('remove', productCard)">
@@ -26,9 +26,12 @@ export default {
       required: true,
     }
   },
-  methods: {
-    cardRemove() {
-      console.log("Удалено!")
+  methods: {},
+  computed:{
+    formatedPrice(){
+      return  this.productCard.price
+          .replace(/[^0-9.]/g, "")
+          .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
   }
 }
@@ -78,6 +81,11 @@ export default {
     color: #3F3F3F;
     margin: 0 0 32px 0;
     height: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
   }
 
   &__price {

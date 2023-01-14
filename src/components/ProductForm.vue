@@ -5,7 +5,11 @@
         <input
             v-model="productCard.title"
             type="text"
-            placeholder="Введите наименование товара">
+            placeholder="Введите наименование товара"
+            :class="[{isDisabledInput:isTitleError}]">
+        <span
+            v-if="isTitleError"
+            class="product-form__error">Поле является обязательным</span>
       </label>
       <label>Описание товара
         <textarea
@@ -17,16 +21,25 @@
         <input
             v-model="productCard.image"
             type="text"
-            placeholder="Введите ссылку">
+            placeholder="Введите ссылку"
+            :class="[{isDisabledInput:isImageError}]">
+        <span
+            v-if="isImageError"
+            class="product-form__error">Поле является обязательным</span>
       </label>
       <label>Цена товара
         <input
             v-model="productCard.price"
             type="text"
-            placeholder="Введите цену">
+            placeholder="Введите цену"
+            :class="[{isDisabledInput:isPriceError}]">
+
+        <span
+            v-if="isPriceError"
+            class="product-form__error">Поле является обязательным</span>
       </label>
       <button class="product-form__button"
-              disabled="disabled"
+              :class="[{isDisabled:isDisabled}]"
               @click="addCard">Добавить товар
       </button>
     </div>
@@ -34,10 +47,15 @@
 </template>
 
 <script>
+
+
 export default {
   name: "product-form",
   data() {
     return {
+      isTitleError: false,
+      isImageError: false,
+      isPriceError: false,
       productCard: {
         id: "",
         title: "",
@@ -48,21 +66,66 @@ export default {
     }
   },
   methods: {
-    addCard() {
-      this.productCard.id = Date.now()
-      this.$emit('addCard', this.productCard)
+    clearForm() {
       this.productCard = {
         title: "",
         description: "",
         image: "",
         price: "",
       }
+      this.isTitleError = false;
+      this.isImageError = false;
+      this.isPriceError = false;
     },
+
+    addCard() {
+      if (this.isDisabled) {
+        this.isTitleError = this.productCard.title === ""
+        this.isImageError = this.productCard.image === ""
+        this.isPriceError = this.productCard.price === ""
+
+        return
+      }
+
+      this.productCard.id = Date.now()
+      this.productCard.price = this.productCard.price.replace(" ", "").trim()
+      console.log(this.productCard.price)
+      this.$emit('addCard', this.productCard)
+      this.clearForm()
+
+    },
+  },
+  computed: {
+    isDisabled() {
+      return this.productCard.title.trim() === ""
+          || this.productCard.image.trim() === ""
+          || this.productCard.price.trim() === ""
+    },
+  },
+  watch: {
+    productCard: {
+      handler: function (val, oldVal) {
+        this.productCard.price = this.productCard.price.replace(/[a-zA-Zа-яА-Я]/g, "");
+        this.productCard.price = this.productCard.price
+            .replace(/[^0-9.]/g, "")
+            .replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+      },
+      deep: true
+    }
   }
 }
+
 </script>
 
 <style lang="scss" scoped>
+.product-form__error {
+  font-weight: 400;
+  font-size: 8px;
+  line-height: 10px;
+  letter-spacing: -0.02em;
+  color: #FF8484;
+  padding-top: 4px;
+}
 
 label {
   display: flex;
@@ -94,9 +157,14 @@ input {
   line-height: 15px;
   color: #3F3F3F;
   background: #FFFEFB;
+
   border: none;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
+}
+
+.isDisabledInput{
+  border: 1px solid #FF8484;
 }
 
 textarea {
@@ -119,7 +187,7 @@ textarea {
 .product-form__button {
   width: 100%;
   padding: 10px 0 10px 0;
-  background: #EEEEEE;
+  background: #7BAE73;
   border-radius: 10px;
   border: none;
   font-family: 'Source Sans Pro', sans-serif;
@@ -127,14 +195,22 @@ textarea {
   font-size: 12px;
   line-height: 15px;
   letter-spacing: -0.02em;
-  color: #B4B4B4;
+  color: #FFFFFF;
   cursor: pointer;
+  outline: none;
 }
 
-.product-form__button:hover {
-  background: #000;
-  color: white;
+.isDisabled {
+  color: #B4B4B4;
+  background: #EEEEEE;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  cursor: default;
 }
+
+//.product-form__button:hover {
+//  background: #000;
+//  color: white;
+//}
 
 input::-webkit-input-placeholder {
   color: #B4B4B4;

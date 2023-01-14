@@ -36,35 +36,35 @@ export default {
       ],
       productList: [
         {
-          id: "1",
+          id: 1,
           title: "Наименование товара4",
           description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
           image: require('./assets/images/card-image.png'),
           price: "40000",
         },
         {
-          id: "2",
+          id: 2,
           title: "Наименование товара2",
           description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
           image: require('./assets/images/card-image.png'),
           price: "20000",
         },
         {
-          id: "3",
+          id: 3,
           title: "Наименование товара5",
-          description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
-          image: require('./assets/images/card-image.png'),
-          price: "1000",
-        },
-        {
-          id: "4",
-          title: "Наименование товара1",
           description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
           image: require('./assets/images/card-image.png'),
           price: "12000",
         },
         {
-          id: "5",
+          id: 4,
+          title: "Наименование товара1",
+          description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
+          image: require('./assets/images/card-image.png'),
+          price: "12",
+        },
+        {
+          id: 5,
           title: "Наименование товара8",
           description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
           image: require('./assets/images/card-image.png'),
@@ -76,10 +76,24 @@ export default {
   methods: {
     addCard(productCard) {
       this.productList.push(productCard);
+      this.setLocalStorage();
     },
+
     removeCard(productCard) {
       this.productList = this.productList.filter(card => card.id !== productCard.id);
-    }
+      this.setLocalStorage();
+    },
+
+    setLocalStorage() {
+      localStorage.setItem("productCard", JSON.stringify(this.productList));
+    },
+
+    setList() {
+      const addLocalStorageList = JSON.parse(localStorage.getItem("productCard"))
+      this.productList = addLocalStorageList
+          ? addLocalStorageList
+          : this.productList;
+    },
   },
   computed: {
     sortedList() {
@@ -96,6 +110,9 @@ export default {
         return this.productList;
       })
     }
+  },
+  created() {
+    this.setList();
   }
 }
 
