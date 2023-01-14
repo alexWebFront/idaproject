@@ -14,14 +14,12 @@
 <script>
 export default {
   name: "my-select",
-
   props: {
     modelValue: {
       type: String,
     },
     options: {
       type: Array,
-      default: () => [],
     },
   },
   methods: {
@@ -33,7 +31,7 @@ export default {
 </script>
 
 <style scoped>
-select{
+select {
   font-family: 'Source Sans Pro', sans-serif;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
@@ -43,9 +41,6 @@ select{
   line-height: 15px;
   color: #B4B4B4;
   outline: none;
-  /*appearance: none;*/
-  /*background: url("@/assets/icons/arrow.svg") no-repeat right;*/
-  /*background-position-x: calc(100% - 8px);*/
   min-width: 122px;
   background-color: #FFFEFB;
 }

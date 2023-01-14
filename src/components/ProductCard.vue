@@ -1,16 +1,17 @@
 <template>
   <div class="card">
     <div class="card__container">
-      <img src="../assets/images/card-image.png" alt="" class="card__image">
+      <div class="card__image">
+        <img :src="productCard.image" alt="Картинка товара">
+      </div>
       <div class="card__content">
-        <div class="card__title">Наименование товара</div>
-        <div class="card__description">Довольно-таки интересное описание товара в несколько строк. Довольно-таки
-          интересное описание товара в несколько строк
+        <div class="card__title">{{ productCard.title }}</div>
+        <div class="card__description">{{ productCard.description }}
         </div>
-        <div class="card__price">10 000 руб.</div>
+        <div class="card__price">{{ productCard.price }} руб.</div>
       </div>
     </div>
-    <div class="card__remove" @click="cardRemove">
+    <div class="card__remove" @click="$emit('remove', productCard)">
       <img src="../assets/icons/delete-card.svg" alt="">
     </div>
   </div>
@@ -19,6 +20,12 @@
 <script>
 export default {
   name: "product-card",
+  props: {
+    productCard: {
+      type: Object,
+      required: true,
+    }
+  },
   methods: {
     cardRemove() {
       console.log("Удалено!")
@@ -41,12 +48,19 @@ export default {
 
   &__content {
     padding: 16px 16px 24px 16px;
-   }
+    min-height: 223px;
+  }
 
   &__image {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
+    width: 332px;
+    height: 200px;
+
+    img {
+      object-fit: cover;
+      background-position: center;
+      width: 100%;
+      height: 100%;
+    }
   }
 
   &__title {
@@ -62,7 +76,8 @@ export default {
     font-size: 16px;
     line-height: 20px;
     color: #3F3F3F;
-    padding: 0 0 32px 0;
+    margin: 0 0 32px 0;
+    height: 80px;
   }
 
   &__price {

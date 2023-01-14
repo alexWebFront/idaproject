@@ -2,18 +2,33 @@
   <div class="product-form">
     <div class="product-form__container">
       <label>Наименование товара
-        <input required type="text" placeholder="Введите наименование товара">
+        <input
+            v-model="productCard.title"
+            type="text"
+            placeholder="Введите наименование товара">
       </label>
       <label>Описание товара
-        <textarea placeholder="Введите описание товара"></textarea>
+        <textarea
+            v-model="productCard.description"
+            placeholder="Введите описание товара">
+        </textarea>
       </label>
       <label>Ссылка на изображение товара
-        <input required type="text" placeholder="Введите ссылку">
+        <input
+            v-model="productCard.image"
+            type="text"
+            placeholder="Введите ссылку">
       </label>
       <label>Цена товара
-        <input required type="text" placeholder="Введите цену">
+        <input
+            v-model="productCard.price"
+            type="text"
+            placeholder="Введите цену">
       </label>
-      <button class="product-form__button" @click="addCard">Добавить товар</button>
+      <button class="product-form__button"
+              disabled="disabled"
+              @click="addCard">Добавить товар
+      </button>
     </div>
   </div>
 </template>
@@ -23,19 +38,26 @@ export default {
   name: "product-form",
   data() {
     return {
-      name: "",
-      description: "",
-      image: "",
-      price: "",
-      productList: [
-        {name: "Название", description: "Описание", image: "Картинка", price: "Цена"}
-      ]
+      productCard: {
+        id: "",
+        title: "",
+        description: "",
+        image: "",
+        price: "",
+      }
     }
   },
   methods: {
     addCard() {
-      console.log(this.productList);
-    }
+      this.productCard.id = Date.now()
+      this.$emit('addCard', this.productCard)
+      this.productCard = {
+        title: "",
+        description: "",
+        image: "",
+        price: "",
+      }
+    },
   }
 }
 </script>
@@ -62,7 +84,7 @@ label {
   padding: 24px;
 }
 
-input{
+input {
   margin-top: 4px;
   outline: none;
   padding: 10px 0 10px 16px;
@@ -70,7 +92,7 @@ input{
   font-weight: 400;
   font-size: 12px;
   line-height: 15px;
-  color: #B4B4B4;
+  color: #3F3F3F;
   background: #FFFEFB;
   border: none;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
@@ -86,7 +108,7 @@ textarea {
   font-weight: 400;
   font-size: 12px;
   line-height: 15px;
-  color: #B4B4B4;
+  color: #3F3F3F;
   padding: 10px 0 0 16px;
   background: #FFFEFB;
   border-radius: 4px;
@@ -94,7 +116,7 @@ textarea {
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.product-form__button{
+.product-form__button {
   width: 100%;
   padding: 10px 0 10px 0;
   background: #EEEEEE;
@@ -108,8 +130,17 @@ textarea {
   color: #B4B4B4;
   cursor: pointer;
 }
-.product-form__button:hover{
+
+.product-form__button:hover {
   background: #000;
   color: white;
+}
+
+input::-webkit-input-placeholder {
+  color: #B4B4B4;
+}
+
+textarea::-webkit-input-placeholder {
+  color: #B4B4B4;
 }
 </style>

@@ -3,14 +3,19 @@
     <div class="app__container">
       <div class="app__header">
         <h1 class="app__title">Добавление товара</h1>
-        <my-select v-model="selectedSort" :options="sortOptions"/>
+        <my-select
+            v-model="selectedSort"
+            :options="sortOptions"/>
       </div>
       <div class="app__content">
-        <product-form/>
-        <product-list/>
+        <product-form @addCard="addCard"/>
+        <product-list
+            :productList="sortedList"
+            @remove="removeCard"/>
       </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -25,13 +30,75 @@ export default {
     return {
       selectedSort: '',
       sortOptions: [
-        {value: "title", name: "По названию"},
-        {value: "body", name: "По описанию"}
-      ]
+        {value: "min", name: "По цене min"},
+        {value: "max", name: "По цене max"},
+        {value: "title", name: "По наименованию"},
+      ],
+      productList: [
+        {
+          id: "1",
+          title: "Наименование товара4",
+          description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
+          image: require('./assets/images/card-image.png'),
+          price: "40000",
+        },
+        {
+          id: "2",
+          title: "Наименование товара2",
+          description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
+          image: require('./assets/images/card-image.png'),
+          price: "20000",
+        },
+        {
+          id: "3",
+          title: "Наименование товара5",
+          description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
+          image: require('./assets/images/card-image.png'),
+          price: "1000",
+        },
+        {
+          id: "4",
+          title: "Наименование товара1",
+          description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
+          image: require('./assets/images/card-image.png'),
+          price: "12000",
+        },
+        {
+          id: "5",
+          title: "Наименование товара8",
+          description: "Довольно-таки интересное описание товара в несколько строк. Довольно-таки интересное описание товара в несколько строк",
+          image: require('./assets/images/card-image.png'),
+          price: "10",
+        },
+      ],
     }
   },
-  methods: {}
+  methods: {
+    addCard(productCard) {
+      this.productList.push(productCard);
+    },
+    removeCard(productCard) {
+      this.productList = this.productList.filter(card => card.id !== productCard.id);
+    }
+  },
+  computed: {
+    sortedList() {
+      return this.productList.sort((value1, value2) => {
+        if (this.selectedSort === "title") {
+          return value1["title"]?.localeCompare(value2["title"]);
+        }
+        if (this.selectedSort === "min") {
+          return value1["price"]?.localeCompare(value2["price"]);
+        }
+        if (this.selectedSort === "max") {
+          return value2["price"]?.localeCompare(value1["price"]);
+        }
+        return this.productList;
+      })
+    }
+  }
 }
+
 </script>
 
 <style lang="scss" scoped>
@@ -43,6 +110,7 @@ export default {
   &__container {
     width: 100%;
     max-width: 1440px;
+    min-height: 900px;
     margin: 0 auto;
     padding: 32px 32px 0 32px;
     background: rgba(255, 254, 251, 0.8);
